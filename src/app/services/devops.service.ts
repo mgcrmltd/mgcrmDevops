@@ -9,23 +9,23 @@ export class DevopsService {
 
   constructor(private httpClient: HttpClient, private devopsFactory: DevopsFactoryService) { }
 
-  async callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Promise<any>{
+  callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Object{
     let hdr = this.devopsFactory.getHeader(personalToken);
 
     switch(verb){
       case 'get' : {
         return this.httpClient.get(
-          targetUrl, { headers: hdr }).toPromise();
+          targetUrl, { headers: hdr }).toPromise().then(x => {return x});
       }
       case 'patch':{
         hdr = hdr.set('content-type', 'application/json-patch+json');
         return this.httpClient.patch(
-          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise();
+          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise().then(x => {return x});
       }
       case 'post':{
         hdr = hdr.set('content-type', 'application/json-patch+json');
         return this.httpClient.post(
-          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise();
+          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise().then(x => {return x});
       }
     }
   }
