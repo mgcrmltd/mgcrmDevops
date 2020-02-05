@@ -1,0 +1,135 @@
+<ion-content>
+  <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" class="ion-text-center">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col style="background-color:lightskyblue;">
+          <ion-item>
+            <ion-label position="stacked">Devops URL</ion-label>
+            <ion-input required="true" type="text" formControlName="devopsUrl" autocomplete="true"
+              placeholder="e.g. https://dev.azure.com/abcltd"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Project Name</ion-label>
+            <ion-input type="text" formControlName="projectName" placeholder="e.g. Project Backlog"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Personal Token</ion-label>
+            <ion-input type="text" formControlName="personalToken"
+              placeholder="e.g. n6tgu3ozeqwjuh5saabcdefghjz6jo7rfa3xf732forrncdnyn6xq"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="!showGetIds">
+            <ion-fab vertical="top" horizontal="end" >
+              <ion-fab-button size="small" (click)="getDevopsIds()">
+                <ion-icon name="cloud-download"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+            <ion-label position="stacked">Enter user story IDs</ion-label>
+            <ion-textarea
+              placeholder="Enter here a list of user story IDs. You can paste straight from Excel or type in IDs separated by commas or spaces. Click the button to pull from a sprint"
+              rows="4" cols="15" formControlName="idList" color="primary" autofocus="false"></ion-textarea>
+          </ion-item>
+          <span *ngIf="showGetIds">
+            <ion-item style="--background:greenyellow;">
+              <ion-label>Current Sprint</ion-label>
+              <ion-toggle slot="start" (ionChange)="toggleGetIdsChange($event)" color="success" checked></ion-toggle>
+              <ion-button (click)="getSprintIds()" slot="end">
+                Add
+              </ion-button>
+              <ion-button color="secondary" (click)="cancelGetIds()" slot="end">
+                Cancel
+              </ion-button>
+            </ion-item>
+            <ion-item style="--background:greenyellow;" *ngIf="showSprintName">
+              <ion-label position="stacked">Sprint Name</ion-label>
+              <ion-input type="text" formControlName="sprintName"></ion-input>
+            </ion-item>
+        </span>
+        </ion-col>
+        <ion-col style="background-color:gray;">
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label style="font-size: small;" color="medium">Created Tasks: {{createdTaskCount}}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-label style="font-size: small;" color="medium">Created Links: {{createdLinkCount}}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item *ngIf="failedTaskCount > 0">
+                <ion-label style="font-size: small;" [style.color]="color">Failures: {{failedTaskCount}}</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row >
+            <ion-col size="12">
+              <ion-item>
+                <ion-textarea placeholder="Output:" style="font-size: small;" readonly="true" rows="10"
+                  value="{{outputText}}" autogrow="true" color="primary" autofocus="false">
+                </ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="8" style="background-color:lightcoral;">
+          <ion-slides #slides>
+            <ion-slide>
+              <ion-fab vertical="top" horizontal="end" slot="fixed">
+                <ion-fab-button (click)="addTaskTitle()">
+                  <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+              <ion-list>
+                <ion-item *ngFor="let title of taskTitles">
+                  <ion-label>{{title}}{{complexText}}</ion-label>
+                  <ion-button color="danger" (click)="deleteTaskTitle(title)" slot="start">
+                    Delete
+                  </ion-button>
+                </ion-item>
+
+              </ion-list>
+            </ion-slide>
+            <ion-slide>
+              <ion-item>
+                <ion-input type="text" formControlName="taskTitleToAdd" placeholder="Enter a new task title">
+                </ion-input>
+                <ion-button (click)="addTask()" slot="end">
+                  Add
+                </ion-button>
+                <ion-button color="secondary" (click)="cancelAddTask()" slot="end">
+                  Cancel
+                </ion-button>
+              </ion-item>
+
+            </ion-slide>
+
+          </ion-slides>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item style="height: 100px;">
+            <ion-label>Verbose Title</ion-label>
+            <ion-toggle slot="start" (ionChange)="toggleChange()" color="success" formControlName="complexTitle"
+              checked></ion-toggle>
+          </ion-item>
+          <ion-button (click)="onLoginSubmit()" [disabled]="!loginForm.valid">
+            Submit
+          </ion-button>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+  </form>
+</ion-content>
