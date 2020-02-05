@@ -8,7 +8,7 @@ The following steps are required to pre-populate connection values.
 git update-index --assume-unchanged src/environments/*
 ````
 
-3. Add values to src/environments/environment.ts. These will then appear as defaults. Be careful about using a default  Personal Access Token. For example:
+2. Add values to src/environments/environment.ts. These will then appear as defaults. Be careful about using a default  Personal Access Token. For example:
 ````
  export const environment = {
   production: false,
