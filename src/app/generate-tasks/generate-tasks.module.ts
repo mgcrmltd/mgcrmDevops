@@ -5,8 +5,9 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { GenerateTasksPageRoutingModule } from './generate-tasks-routing.module';
-
+import { DetailsComponent} from '../details/details.component'
 import { GenerateTasksPage } from './generate-tasks.page';
+// import { UseParentFormDirective} from '../use-parent-form.directive'
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { GenerateTasksPage } from './generate-tasks.page';
     IonicModule,
     GenerateTasksPageRoutingModule
   ],
-  declarations: [GenerateTasksPage]
+  declarations: [GenerateTasksPage, DetailsComponent]
 })
 export class GenerateTasksPageModule {}

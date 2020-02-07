@@ -9,7 +9,7 @@ export class DevopsService {
 
   constructor(private httpClient: HttpClient, private devopsFactory: DevopsFactoryService) { }
 
-  async callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Promise<any>{
+  async callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Promise<Object>{
     let hdr = this.devopsFactory.getHeader(personalToken);
 
     switch(verb){
@@ -55,13 +55,13 @@ export class DevopsService {
     return this.callDevopsApi(targetUrl,personalToken,'patch',linkBody);
   }
 
-  getIterationsFromDevops(personalToken: string, devopsUrl: string, projectName: string) {
-    let targetUrl = this.devopsFactory.getUrlIterations(devopsUrl, projectName);
-    return this.callDevopsApi(targetUrl,personalToken,'get',null);
+  async getIterationsFromDevops(personalToken: string, devopsUrl: string, projectName: string, teamName: string): Promise<any> {
+    let targetUrl = this.devopsFactory.getUrlIterations(devopsUrl, projectName, teamName);
+    return await this.callDevopsApi(targetUrl,personalToken,'get',null);
   }
 
-  getIterationWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, iterationId: string) {
-    let targetUrl = this.devopsFactory.getUrlIterationWorkItems(devopsUrl,projectName,iterationId);
+  getIterationWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, teamName: string, iterationId: string) {
+    let targetUrl = this.devopsFactory.getUrlIterationWorkItems(devopsUrl,projectName,teamName,iterationId);
     return this.callDevopsApi(targetUrl,personalToken,'get',null);
   }
 

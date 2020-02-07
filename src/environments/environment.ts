@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   devopsUrl: "",
   projectName: "",
+  teamName: "",
   personalToken: ""
 };
 

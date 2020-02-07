@@ -31,12 +31,12 @@ export class DevopsFactoryService {
     return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/_apis/wit/workitems/${taskId}?api-version=5.1`;
   }
 
-  getUrlIterations(devopsUrl: string, projectName: string){
-    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/_apis/work/teamsettings/iterations?api-version=5.1`;
+  getUrlIterations(devopsUrl: string, projectName: string, teamName){
+    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/${teamName}/_apis/work/teamsettings/iterations?api-version=5.1`;
   }
 
-  getUrlIterationWorkItems(devopsUrl: string, projectName: string, iterationId: string){
-    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/_apis/work/teamsettings/iterations/${iterationId}/workitems?api-version=5.1-preview.1`;
+  getUrlIterationWorkItems(devopsUrl: string, projectName: string, teamName:string, iterationId: string){
+    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/${teamName}/_apis/work/teamsettings/iterations/${iterationId}/workitems?api-version=5.1-preview.1`;
   }
 
   getTaskBodies(workItem: any, taskTitles: string[], useComplexTitle: Boolean): any[] {
