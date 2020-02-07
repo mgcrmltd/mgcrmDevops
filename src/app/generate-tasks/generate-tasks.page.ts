@@ -4,6 +4,7 @@ import { IonSlides } from '@ionic/angular';
 import { DevopsService } from '../services/devops.service'
 import { DevopsFactoryService } from '../services/devops-factory.service'
 import {DetailsComponent} from '../details/details.component'
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -23,13 +24,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
   complexText: string;
   color: string = "red";
 
-  taskTitles: string[] = [
-    "JavaScript",
-    "Plugins",
-    "Customization",
-    "QA Exec",
-    "QA Prep"
-  ];
+  taskTitles: string[] = [];
 
   constructor(private devopService: DevopsService, 
     private devopsFactory: DevopsFactoryService) {
@@ -43,6 +38,15 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
       ),
     });
     this.complexText = "";
+    this.setTaskTitles();
+  }
+
+  setTaskTitles() {
+    environment.taskTitles.forEach(
+      x =>{
+        this.taskTitles.push(x.name);
+      }
+    )
   }
 
   ngAfterViewInit(): void {

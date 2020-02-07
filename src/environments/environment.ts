@@ -7,7 +7,10 @@ export const environment = {
   devopsUrl: "",
   projectName: "",
   teamName: "",
-  personalToken: ""
+  personalToken: "",
+  taskTitles : [
+    
+  ]
 };
 
 /*

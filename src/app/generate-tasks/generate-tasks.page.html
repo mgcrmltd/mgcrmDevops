@@ -43,13 +43,13 @@
       <ion-row>
         <ion-col size="8" style="background-color:lightcoral;">
           <ion-slides #slides>
-            <ion-slide>
+            <ion-slide style="min-height: 70px;">
               <ion-fab vertical="top" horizontal="end" slot="fixed">
                 <ion-fab-button (click)="addTaskTitle()">
                   <ion-icon name="add"></ion-icon>
                 </ion-fab-button>
               </ion-fab>
-              <ion-list>
+              <ion-list *ngIf="taskTitles.length">
                 <ion-item *ngFor="let title of taskTitles">
                   <ion-label>{{title}}{{complexText}}</ion-label>
                   <ion-button color="danger" (click)="deleteTaskTitle(title)" slot="start">
