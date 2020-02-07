@@ -59,6 +59,7 @@ export class DetailsComponent implements OnInit {
 
   getDevopsIds() {
     this.showGetIds = true;
+    this.sprintForm.controls.sprintName.updateValueAndValidity();
   }
 
   toggleGetIdsChange(evt) {
@@ -101,9 +102,6 @@ export class DetailsComponent implements OnInit {
   }
 
   getSprintIds() {
-    if (this.getTeamName() == null || this.getTeamName().length < 1) {
-      alert('Enter a team name'); return;
-    }
     this.group.controls.idList.setValue("");
     this.devopService.getIterationsFromDevops(this.getPersonalToken(),
       this.getDevopsUrl(),
@@ -169,7 +167,11 @@ export class DetailsComponent implements OnInit {
   }
 
   cancelGetIds() {
+    this.sprintName = "";
+    this.showSprintName = false;
     this.showGetIds = false;
+    this.sprintForm.controls.sprintName.clearValidators();
+    this.sprintForm.controls.sprintName.updateValueAndValidity();
   }
 
   trimTrailingChars(s, charToTrim) {
