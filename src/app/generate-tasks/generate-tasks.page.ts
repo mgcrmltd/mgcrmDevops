@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
 import { DevopsService } from '../services/devops.service'
-import { environment } from '../../environments/environment'
 import { DevopsFactoryService } from '../services/devops-factory.service'
 import {DetailsComponent} from '../details/details.component'
 
@@ -12,9 +11,11 @@ import {DetailsComponent} from '../details/details.component'
   templateUrl: './generate-tasks.page.html',
   styleUrls: ['./generate-tasks.page.scss'],
 })
-export class GenerateTasksPage implements OnInit {
+export class GenerateTasksPage implements OnInit, AfterViewInit {
+ 
   @ViewChild('slides', { static: false }) slides: IonSlides;
-  loginForm: FormGroup;
+  @ViewChild('appDetails', { static: false }) details: DetailsComponent;
+  public loginForm: FormGroup;
   createdTaskCount: number;
   createdLinkCount: number;
   failedTaskCount: number;
@@ -31,33 +32,24 @@ export class GenerateTasksPage implements OnInit {
   ];
 
   constructor(private devopService: DevopsService, 
-    private details: DetailsComponent,
     private devopsFactory: DevopsFactoryService) {
     this.loginForm = new FormGroup({
-      devopsUrl: new FormControl(
-        '', [Validators.required]
-      ),
-      projectName: new FormControl(
-        '', [Validators.required]
-      ),
-      idList: new FormControl(
-        '', [Validators.required]
-      ),
-      personalToken: new FormControl(
-        '', [Validators.required]
-      ),
+
       taskTitleToAdd: new FormControl(
         ''
       ),
       complexTitle: new FormControl(
         ''
       ),
-      sprintName: new FormControl(
-        ''
-      ),
     });
-    this.resetVals()
     this.complexText = "";
+  }
+
+  ngAfterViewInit(): void {
+    this.resetVals();
+    this.loginForm.controls.complexTitle.setValue(true);
+    this.toggleChange();
+    this.loginForm.markAllAsTouched();
   }
 
   getFailureColour() {
@@ -65,12 +57,7 @@ export class GenerateTasksPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loginForm.controls.devopsUrl.setValue(environment.devopsUrl);
-    this.loginForm.controls.projectName.setValue(environment.projectName);
-    this.loginForm.controls.personalToken.setValue(environment.personalToken);
-    this.loginForm.controls.complexTitle.setValue(true);
-    this.toggleChange();
-    this.loginForm.markAllAsTouched();
+    
   }
 
   toggleChange() {
@@ -138,6 +125,7 @@ export class GenerateTasksPage implements OnInit {
     this.details.showSprintName = false;
     this.outputText = "";
     this.details.sprintName = "";
+    
   }
 
   appendOutputText(textToAdd: string) {

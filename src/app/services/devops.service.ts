@@ -9,23 +9,23 @@ export class DevopsService {
 
   constructor(private httpClient: HttpClient, private devopsFactory: DevopsFactoryService) { }
 
-  callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Object{
+  async callDevopsApi(targetUrl: string, personalToken: string, verb: string, body: Object): Promise<Object>{
     let hdr = this.devopsFactory.getHeader(personalToken);
 
     switch(verb){
       case 'get' : {
         return this.httpClient.get(
-          targetUrl, { headers: hdr }).toPromise().then(x => {return x});
+          targetUrl, { headers: hdr }).toPromise();
       }
       case 'patch':{
         hdr = hdr.set('content-type', 'application/json-patch+json');
         return this.httpClient.patch(
-          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise().then(x => {return x});
+          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise();
       }
       case 'post':{
         hdr = hdr.set('content-type', 'application/json-patch+json');
         return this.httpClient.post(
-          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise().then(x => {return x});
+          targetUrl, JSON.stringify(body), { headers: hdr }).toPromise();
       }
     }
   }
@@ -55,13 +55,13 @@ export class DevopsService {
     return this.callDevopsApi(targetUrl,personalToken,'patch',linkBody);
   }
 
-  getIterationsFromDevops(personalToken: string, devopsUrl: string, projectName: string) {
-    let targetUrl = this.devopsFactory.getUrlIterations(devopsUrl, projectName);
-    return this.callDevopsApi(targetUrl,personalToken,'get',null);
+  async getIterationsFromDevops(personalToken: string, devopsUrl: string, projectName: string, teamName: string): Promise<any> {
+    let targetUrl = this.devopsFactory.getUrlIterations(devopsUrl, projectName, teamName);
+    return await this.callDevopsApi(targetUrl,personalToken,'get',null);
   }
 
-  getIterationWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, iterationId: string) {
-    let targetUrl = this.devopsFactory.getUrlIterationWorkItems(devopsUrl,projectName,iterationId);
+  getIterationWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, teamName: string, iterationId: string) {
+    let targetUrl = this.devopsFactory.getUrlIterationWorkItems(devopsUrl,projectName,teamName,iterationId);
     return this.callDevopsApi(targetUrl,personalToken,'get',null);
   }
 
