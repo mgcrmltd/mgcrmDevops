@@ -1,0 +1,29 @@
+.forecast_container{
+    overflow-x: scroll!important;
+    overflow-y: scroll!important;
+    overflow-x: visible!important;
+    overflow-y: visible!important;
+    word-wrap: break-word;
+    height:1vh;
+    font-size:0.8em;
+    font-weight:300;
+}
+
+/* Element | http://localhost:8100/ */
+
+  
+ion-row > ion-col > ion-row > ion-col{
+    padding-top: 0px;
+}
+
+ion-row > ion-col{
+    padding-right: 0px;
+}
+
+ion-chip {
+    line-height: 2;
+}
+
+
+/* Element | http://localhost:8100/ */
+

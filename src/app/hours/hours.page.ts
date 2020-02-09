@@ -9,6 +9,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class HoursPage implements OnInit {
   hoursForm: FormGroup;
   showAddGroup:Boolean;
+  showDetails:number;
   headers:string[] = [];
   labels:string[][];
   constructor() { }
@@ -18,12 +19,17 @@ export class HoursPage implements OnInit {
       groupName: new FormControl('',)
     });
     this.showAddGroup = false;
+    this.showDetails = 4;
     this.labels = new Array();
     // this.labels.push(new Array());
     // this.labels.push(new Array());
     // this.labels[0].push("mo");
     // this.labels[0].push("g");
     // this.labels[1].push("jimi");
+  }
+
+  displayDetails(){
+    this.showDetails = this.showDetails == 0 ? 4 : 0;
   }
   displayAddGroup(){
     this.showAddGroup = true;
@@ -38,7 +44,12 @@ export class HoursPage implements OnInit {
     this.headers = this.headers.filter(x => {return !this.equalTo(x,this.headers[i])});
   }
   alertAdd(i){
-    this.labels[i].push('test');
+    if((<HTMLInputElement>document.getElementById(this.headers[i])).value == "") return;
+    this.labels[i].push((<HTMLInputElement>document.getElementById(this.headers[i])).value);
+    (<HTMLInputElement>document.getElementById(this.headers[i])).value = "";
+  }
+  removeTag(header:number, tag:number){
+    this.labels[header].splice(tag,1);
   }
   onClickAdd(){
     if(this.headers.includes(this.getGroupName())) return;
