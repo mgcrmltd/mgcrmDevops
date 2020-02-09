@@ -9,7 +9,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class HoursPage implements OnInit {
   hoursForm: FormGroup;
   showAddGroup:Boolean;
-  headers:string[] = ["Dev","Test"];
+  headers:string[] = [];
   labels:string[][];
   constructor() { }
 
@@ -19,21 +19,13 @@ export class HoursPage implements OnInit {
     });
     this.showAddGroup = false;
     this.labels = new Array();
-    this.labels.push(new Array());
-    this.labels.push(new Array());
-    this.labels[0].push("mo");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[0].push("g");
-    this.labels[1].push("jimi");
+    // this.labels.push(new Array());
+    // this.labels.push(new Array());
+    // this.labels[0].push("mo");
+    // this.labels[0].push("g");
+    // this.labels[1].push("jimi");
   }
-  addGroup(){
+  displayAddGroup(){
     this.showAddGroup = true;
   }
 
@@ -45,18 +37,27 @@ export class HoursPage implements OnInit {
     this.labels.splice(i,1);
     this.headers = this.headers.filter(x => {return !this.equalTo(x,this.headers[i])});
   }
-  alertAdd(){
-    alert('Add');
+  alertAdd(i){
+    this.labels[i].push('test');
   }
   onClickAdd(){
-    this.headers.push(this.getGroupName());
+    if(this.headers.includes(this.getGroupName())) return;
+    this.addGroup(this.getGroupName());
+    this.setGroupName("");
     this.showAddGroup = false;
+  }
+  addGroup(name: string){
+    this.headers.push(name);
+    this.labels.push(new Array());
   }
   onClickCancel(){
     this.showAddGroup = false;
   }
   getGroupName(){
     return this.hoursForm.controls.groupName.value;
+  }
+  setGroupName(txt: string){
+    this.hoursForm.controls.groupName.setValue(txt);
   }
 
   onSubmit(abc){
