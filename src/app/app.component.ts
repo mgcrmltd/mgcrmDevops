@@ -17,9 +17,14 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'Generate Tasks',
+      title: 'Tasks',
       url: '/generate-tasks',
       icon: 'add-circle'
+    },
+    {
+      title: 'Hours',
+      url: '/hours',
+      icon: 'timer'
     }
   ];
 

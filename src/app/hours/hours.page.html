@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>hours</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="hoursForm" (ngSubmit)="onSubmit(hoursForm.value)">
+  <ion-grid >
+    <ion-row style="background-color:lightgray">
+      <ion-col size="6">
+        <app-details [group]="hoursForm"></app-details>
+       </ion-col>
+      <ion-col style="background-color: lightgray;" *ngFor="let header of headers; let i=index;">
+       <ion-item >
+        <ion-chip >
+          <ion-icon name="remove" color="danger" (click)="alertRemove(i)"></ion-icon>
+          <ion-label>{{header}}</ion-label>
+        </ion-chip>
+        <ion-icon name="add"  color="success" (click)="alertAdd()"></ion-icon>
+       </ion-item> 
+        <ion-item *ngFor="let lbl of labels[i]">{{lbl}}</ion-item>
+      </ion-col>
+      <ion-col *ngIf="showAddGroup == true" size="4">
+        <ion-input formControlName="groupName" type="text" placeholder="Enter new group name"></ion-input>
+        <ion-button (click)="onClickAdd()">
+          Add
+        </ion-button>
+        <ion-button (click)="onClickCancel()">
+          Cancel
+        </ion-button>
+      </ion-col>
+     <ion-fab vertical="top" horizontal="end">
+       <ion-fab-button (click)="addGroup()" size="small">
+         <ion-icon name="add"></ion-icon>
+       </ion-fab-button>
+     </ion-fab>
+    </ion-row>
+
+  </ion-grid>
+</form>
+</ion-content>
