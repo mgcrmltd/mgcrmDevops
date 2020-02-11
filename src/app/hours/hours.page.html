@@ -3,8 +3,7 @@
   <ion-grid fixed> 
     <ion-row style="background-color:lightgray;" nowrap>
           <ion-col [size]="showDetails">
-
-            <app-details [group]="hoursForm"></app-details>
+            <app-details [group]="hoursForm" #appDetails></app-details>
            </ion-col >
              <ion-col style="overflow: auto;">
                <ion-row nowrap class="forecast_container">
@@ -46,17 +45,46 @@
                   </ion-fab-button>
                 </ion-fab>
              </ion-col>
-
-           
-
-
      <ion-fab vertical="bottom" horizontal="end">
       <ion-fab-button (click)="displayDetails()" size="small">
         <ion-icon name="swap"></ion-icon>
       </ion-fab-button>
     </ion-fab>
     </ion-row>
-
   </ion-grid>
+  <!-- <ion-grid fixed>
+    <ion-row >
+      <ion-col size="12">
+        <ion-item>
+          <ion-textarea placeholder="Output:" style="font-size: small;" readonly="true" rows="10"
+            value="{{outputText}}" autogrow="true" color="primary" autofocus="false">
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <ion-grid *ngIf="gsArray.length > 0" fixed style="background-color: cornflowerblue;">
+    <ion-row>
+      <ion-col *ngFor="let gs of gsArray" style="color: cornsilk;">
+        {{gs.header}}
+        <ion-list>
+          <ion-item>
+            <ion-label>Estimated: {{gs.estimated}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Completed: {{gs.completed}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Remaining: {{gs.remaining}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item>
+ <ion-button (click)="sumHours()">
+   Sum Hours
+ </ion-button>
+  </ion-item>
 </form>
 </ion-content>

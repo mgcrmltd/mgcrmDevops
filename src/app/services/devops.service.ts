@@ -30,8 +30,8 @@ export class DevopsService {
     }
   }
 
-  async getWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, workItemIds: string[]): Promise<any> {
-    let targetUrl = this.devopsFactory.getUrlWorkItems(devopsUrl,projectName,workItemIds);
+  async getWorkItemsFromDevops(personalToken: string, devopsUrl: string, projectName: string, workItemIds: string[], expand:Boolean = false): Promise<any> {
+    let targetUrl = this.devopsFactory.getUrlWorkItems(devopsUrl,projectName,workItemIds, expand);
     return this.callDevopsApi(targetUrl,personalToken,'get',null);
   }
 
