@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { environment } from '../../environments/environment';
 import { DetailsComponent } from '../details/details.component'
 import { DevopsService } from '../services/devops.service';
 import { GroupSum } from './groupsum';
@@ -72,14 +71,14 @@ export class HoursPage implements OnInit {
   }
 
   initializeFromStore() {
-    if (environment == null || environment.hoursCalc == null) return;
-    environment.hoursCalc.forEach((groupName, i) => {
-      this.headers.push(groupName.group);
-      this.labels.push(new Array());
-      groupName.tags.forEach(tag => {
-        this.labels[i].push(tag.tag);
-      });
-    })
+    // if (environment == null || environment.hoursCalc == null) return;
+    // environment.hoursCalc.forEach((groupName, i) => {
+    //   this.headers.push(groupName.group);
+    //   this.labels.push(new Array());
+    //   groupName.tags.forEach(tag => {
+    //     this.labels[i].push(tag.tag);
+    //   });
+    // })
   }
 
   displayDetails() {
