@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment'
 })
 export class DetailsEnvironmentService implements OnInit, IDevopsDetailsService<DevopsDetails> {
   save(details:DevopsDetails) {
-    throw new Error("Method not implemented.");
+    throw new Error("Cannot save to environment");
   }
   ngOnInit(): void {
     

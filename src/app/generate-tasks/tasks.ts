@@ -1,6 +1,8 @@
-export class DevopsTasks{
-    devopsUrl: string;    
-    projectName: string;
-    personalToken: string;
-    teamName: string;
+export class DevopsTaskList{
+    complex: boolean;    
+    taskTitles: DevopsTask[];
+}
+
+export class DevopsTask{
+    name: string;
 }
