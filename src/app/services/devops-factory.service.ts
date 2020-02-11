@@ -19,8 +19,9 @@ export class DevopsFactoryService {
     return `${devopsUrl}/${projectName}`;
   }
 
-  getUrlWorkItems(devopsUrl: string, projectName: string, workItemIds: string[]){
-    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/_apis/wit/workitems?ids=${this.getCommaSeparatedStringFromArray(workItemIds)}&api-version=5.0`;
+  getUrlWorkItems(devopsUrl: string, projectName: string, workItemIds: string[], expand:Boolean){
+    let expandText = expand ? '&$expand=relations' : '';
+    return `${this.getDevopsBaseUrl(devopsUrl,projectName)}/_apis/wit/workitems?ids=${this.getCommaSeparatedStringFromArray(workItemIds)}${expandText}&api-version=5.0`;
   }
 
   getUrlCreateWorkItem(devopsUrl: string, projectName: string, itemType: string){

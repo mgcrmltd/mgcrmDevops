@@ -18,7 +18,11 @@ const routes: Routes = [
   {
     path: 'generate-tasks',
     loadChildren: () => import('./generate-tasks/generate-tasks.module').then( m => m.GenerateTasksPageModule)
+  },  {
+    path: 'hours',
+    loadChildren: () => import('./hours/hours.module').then( m => m.HoursPageModule)
   }
+
 ];
 
 @NgModule({

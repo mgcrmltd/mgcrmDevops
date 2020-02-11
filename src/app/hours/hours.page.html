@@ -1,0 +1,90 @@
+<ion-content>
+  <form [formGroup]="hoursForm" (ngSubmit)="onSubmit(hoursForm.value)">
+  <ion-grid fixed> 
+    <ion-row style="background-color:lightgray;" nowrap>
+          <ion-col [size]="showDetails">
+            <app-details [group]="hoursForm" #appDetails></app-details>
+           </ion-col >
+             <ion-col style="overflow: auto;">
+               <ion-row nowrap class="forecast_container">
+                <ion-col *ngFor="let header of headers; let i=index;">
+                  <ion-item >
+                   <ion-chip >
+                     <ion-icon name="close-circle-outline" color="danger" (click)="alertRemove(i)"></ion-icon>
+                     <ion-label style="background-color: yellow; padding: 1px;">{{header}}</ion-label>
+                     <ion-input type="text" [id]="header" style="min-width: 100px; max-width:100px;"  placeholder="...."></ion-input>
+                   </ion-chip>
+                   <ion-icon name="add"  color="success" (click)="alertAdd(i)"></ion-icon>
+                  </ion-item> 
+                   <ion-item *ngFor="let lbl of labels[i]; let j=index">
+                     <ion-chip color="primary" mode="ios" outline="true">
+                       <ion-label>{{lbl}}</ion-label>
+                     <ion-icon name="close-circle-outline" color="danger" (click)="removeTag(i,j)"></ion-icon>
+                     </ion-chip>
+                    </ion-item>
+                 </ion-col>
+               </ion-row>
+                 <ion-col  *ngIf="showAddGroup == true">
+                   <ion-row >
+                     <ion-item color="medium">
+                      <ion-input formControlName="groupName" type="text" placeholder="Enter new group name"></ion-input>
+                      <ion-button (click)="onClickAdd()">
+                        Add
+                      </ion-button>
+                      <ion-button (click)="onClickCancel()">
+                        Cancel
+                      </ion-button>
+                     </ion-item>
+
+                   </ion-row>
+
+                 </ion-col>
+                 <ion-fab vertical="center" horizontal="end">
+                  <ion-fab-button (click)="displayAddGroup()" size="small">
+                    <ion-icon name="add"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
+             </ion-col>
+     <ion-fab vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="displayDetails()" size="small">
+        <ion-icon name="swap"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-grid fixed>
+    <ion-row >
+      <ion-col size="12">
+        <ion-item>
+          <ion-textarea placeholder="Output:" style="font-size: small;" readonly="true" rows="10"
+            value="{{outputText}}" autogrow="true" color="primary" autofocus="false">
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <ion-grid *ngIf="gsArray.length > 0" fixed style="background-color: cornflowerblue;">
+    <ion-row>
+      <ion-col size="2" *ngFor="let gs of gsArray" style="background-color: cornsilk;">
+        {{gs.header}}
+        <ion-list>
+          <ion-item>
+            <ion-label>Estimated: {{gs.estimated}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Completed: {{gs.completed}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Remaining: {{gs.remaining}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item>
+ <ion-button (click)="sumHours()">
+   Sum Hours
+ </ion-button>
+  </ion-item>
+</form>
+</ion-content>
