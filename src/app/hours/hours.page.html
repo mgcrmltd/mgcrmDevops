@@ -65,7 +65,7 @@
   </ion-grid> -->
   <ion-grid *ngIf="gsArray.length > 0" fixed style="background-color: cornflowerblue;">
     <ion-row>
-      <ion-col *ngFor="let gs of gsArray" style="color: cornsilk;">
+      <ion-col size="2" *ngFor="let gs of gsArray" style="background-color: cornsilk;">
         {{gs.header}}
         <ion-list>
           <ion-item>
