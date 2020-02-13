@@ -1,8 +1,13 @@
+import { Plugins } from '@capacitor/core';
 import { Component, OnInit, Input } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { DevopsService } from '../services/devops.service';
 import { environment } from '../../environments/environment';
 import { DevopsFactoryService } from '../services/devops-factory.service'
+import { DetailsService } from '../services/details.service';
+import { DevopsDetails } from './details';
+
+const { Storage } = Plugins;
 
 
 @Component({
@@ -17,7 +22,8 @@ export class DetailsComponent implements OnInit {
   sprintName: string;
   sprintForm: FormGroup;
 
-  constructor(private devopService: DevopsService) {
+  constructor(private devopService: DevopsService,
+     private detailsService: DetailsService) {
     this.showGetIds = false;
     this.showSprintName = false;
     this.sprintName = "";
@@ -46,11 +52,20 @@ export class DetailsComponent implements OnInit {
         '', [Validators.required]
       ),
     });
+    var a = environment;
+    this.populateDetails();
+  }
 
-    this.group.controls.devopsUrl.setValue(environment.devopsUrl);
-    this.group.controls.projectName.setValue(environment.projectName);
-    this.group.controls.personalToken.setValue(environment.personalToken);
-    this.sprintForm.controls.teamName.setValue(environment.teamName);
+  async populateDetails() {
+    var avail = await this.detailsService.detailsAvailable();
+    if (!avail) return;
+    this.detailsService.getDevopsDetails().then(deets => {
+      this.group.controls.devopsUrl.setValue(deets.devopsUrl);
+      this.group.controls.projectName.setValue(deets.projectName);
+      this.group.controls.personalToken.setValue(deets.personalToken);
+      this.sprintForm.controls.teamName.setValue(deets.teamName);
+    }
+    );
   }
 
   setSprintValidators() {
@@ -76,8 +91,9 @@ export class DetailsComponent implements OnInit {
   getDevopsUrl() {
     return this.group.controls.devopsUrl.value;
   }
-  getProjectName(): string {
-    return encodeURI(this.group.controls.projectName.value);
+  getProjectName(encode:boolean = true): string {
+    if(encode) return encodeURI(this.group.controls.projectName.value);
+    return this.group.controls.projectName.value;
   }
   getPersonalToken(): string {
     return this.group.controls.personalToken.value;
@@ -93,8 +109,9 @@ export class DetailsComponent implements OnInit {
     return this.getIds().split(',');
   }
 
-  getTeamName(): string {
-    return encodeURI(this.sprintForm.controls.teamName.value);
+  getTeamName(encode:boolean = true): string {
+    if(encode) return encodeURI(this.sprintForm.controls.teamName.value);
+    return this.sprintForm.controls.teamName.value;
   }
 
   getSprintName(): string {
@@ -129,7 +146,7 @@ export class DetailsComponent implements OnInit {
                   );
               }
             );
-        }, error=>{alert(error.message)}
+        }, error => { alert(error.message) }
       )
   }
 
@@ -137,6 +154,15 @@ export class DetailsComponent implements OnInit {
     this.group.controls.devopsUrl.setValue(this.trimTrailingChars(
       this.group.controls.devopsUrl.value, '/'
     ));
+  }
+
+  getFormDetails(): DevopsDetails{
+    var deets = new DevopsDetails();
+    deets.devopsUrl = this.getDevopsUrl();
+    deets.personalToken = this.getPersonalToken();
+    deets.projectName = this.getProjectName(false);
+    deets.teamName = this.getTeamName(false);
+    return deets;
   }
 
   getCurrentOrNamedSprint(res: Object): string {
@@ -179,5 +205,19 @@ export class DetailsComponent implements OnInit {
     var result = s.replace(regExp, "");
 
     return result;
+  }
+
+  saveDetails() {
+    if (this.allBlank()) return;
+    this.detailsService.save(this.getFormDetails());
+  }
+
+  allBlank(): boolean {
+    if (this.getPersonalToken() == ""
+      && this.getDevopsUrl() == ""
+      && this.getProjectName() == ""
+      && this.getTeamName() == ""
+    ) return true;
+    return false;
   }
 }

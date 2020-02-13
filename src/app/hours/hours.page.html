@@ -1,6 +1,6 @@
 <ion-content>
   <form [formGroup]="hoursForm" (ngSubmit)="onSubmit(hoursForm.value)">
-  <ion-grid fixed> 
+  <ion-grid> 
     <ion-row style="background-color:lightgray;" nowrap>
           <ion-col [size]="showDetails">
             <app-details [group]="hoursForm" #appDetails></app-details>
@@ -39,6 +39,11 @@
                    </ion-row>
 
                  </ion-col>
+                 <ion-fab vertical="top" horizontal="end">
+                  <ion-fab-button size="small" (click)="save()">
+                    <ion-icon name="save"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
                  <ion-fab vertical="center" horizontal="end">
                   <ion-fab-button (click)="displayAddGroup()" size="small">
                     <ion-icon name="add"></ion-icon>
@@ -52,17 +57,6 @@
     </ion-fab>
     </ion-row>
   </ion-grid>
-  <!-- <ion-grid fixed>
-    <ion-row >
-      <ion-col size="12">
-        <ion-item>
-          <ion-textarea placeholder="Output:" style="font-size: small;" readonly="true" rows="10"
-            value="{{outputText}}" autogrow="true" color="primary" autofocus="false">
-          </ion-textarea>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
   <ion-grid *ngIf="gsArray.length > 0" fixed style="background-color: cornflowerblue;">
     <ion-row>
       <ion-col size="2" *ngFor="let gs of gsArray" style="background-color: cornsilk;">

@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, destroyPlatform } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
 import { DevopsService } from '../services/devops.service'
 import { DevopsFactoryService } from '../services/devops-factory.service'
-import {DetailsComponent} from '../details/details.component'
-import { environment } from 'src/environments/environment';
+import { DetailsComponent } from '../details/details.component'
+import { TasksService } from '../services/tasks.service';
+import { DevopsTaskList, DevopsTask } from './tasks';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
   taskTitles: string[] = [];
 
   constructor(private devopService: DevopsService, 
-    private devopsFactory: DevopsFactoryService) {
+    private devopsFactory: DevopsFactoryService,
+    private taskService: TasksService) {
     this.loginForm = new FormGroup({
 
       taskTitleToAdd: new FormControl(
@@ -37,16 +39,21 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
         ''
       ),
     });
-    this.complexText = "";
-    this.setTaskTitles();
+    
   }
 
-  setTaskTitles() {
-    environment.taskTitles.forEach(
-      x =>{
-        this.taskTitles.push(x.name);
-      }
-    )
+  async populateDetails() {
+    var avail = await this.taskService.detailsAvailable();
+    if (!avail) return;
+    this.taskService.getDevopsDetails().then(deets => {
+      this.loginForm.controls.complexTitle.setValue(deets.complex);
+      deets.taskTitles.forEach(
+        x =>{
+          this.taskTitles.push(x.name);
+        }
+      );
+    }
+    );
   }
 
   ngAfterViewInit(): void {
@@ -54,6 +61,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.loginForm.controls.complexTitle.setValue(true);
     this.toggleChange();
     this.loginForm.markAllAsTouched();
+    this.populateDetails();
   }
 
   getFailureColour() {
@@ -158,9 +166,30 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.slides.slideTo(1);
   }
 
+  getFormDetails(): DevopsTaskList{
+    var deets = new DevopsTaskList();
+    deets.taskTitles = new Array();
+    deets.complex = this.loginForm.controls.complexTitle.value;
+    this.taskTitles.forEach(x => {
+      let tsk = new DevopsTask();
+      tsk.name = x;
+      deets.taskTitles.push(tsk);
+    });
+    return deets;
+  }
+
+  save(){
+    if (this.allBlank()) return;
+    this.taskService.save(this.getFormDetails());
+  }
+
+  allBlank(): boolean {
+    return this.taskTitles.length < 1;
+  }
   addTask() {
     var t = this.loginForm.controls.taskTitleToAdd.value;
-    if (t === null || t === undefined) return;
+    if (t === null || typeof t === undefined || t==="") return;
+    if(this.taskTitles.includes(t)) return;
     this.taskTitles.push(t);
     this.loginForm.controls.taskTitleToAdd.setValue("");
     this.slides.slideTo(0);
