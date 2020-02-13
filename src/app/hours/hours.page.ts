@@ -1,16 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DetailsComponent } from '../details/details.component'
 import { DevopsService } from '../services/devops.service';
 import { environment } from 'src/environments/environment';
 import { GroupSum } from './groupsum';
+import { HoursService } from '../services/hours.service';
+import { DevopsHoursGroupList, DevopsHoursGroup } from './hours';
 
 @Component({
   selector: 'app-hours',
   templateUrl: './hours.page.html',
   styleUrls: ['./hours.page.scss'],
 })
-export class HoursPage implements OnInit {
+export class HoursPage implements OnInit, AfterViewInit {
+  ngAfterViewInit(): void {
+    this.populateDetails()
+  }
 
   @ViewChild('appDetails', { static: false }) details: DetailsComponent;
 
@@ -20,7 +25,7 @@ export class HoursPage implements OnInit {
   headers: string[] = [];
   labels: string[][];
   gsArray:GroupSum[];
-  constructor(private devopService: DevopsService, ) { }
+  constructor(private devopService: DevopsService, private hoursService: HoursService) { }
 
   ngOnInit() {
     this.hoursForm = new FormGroup({
@@ -29,7 +34,6 @@ export class HoursPage implements OnInit {
     this.showAddGroup = false;
     this.showDetails = 4;
     this.labels = new Array();
-    this.initializeFromStore();
     this.gsArray = new Array();
   }
 
@@ -71,16 +75,38 @@ export class HoursPage implements OnInit {
     this.details.sprintName = "";
   }
 
-  initializeFromStore() {
-    if (environment == null || environment.hoursCalc == null) return;
-    environment.hoursCalc.forEach((groupName, i) => {
-      this.headers.push(groupName.group);
-      this.labels.push(new Array());
-      groupName.tags.forEach(tag => {
+  async populateDetails() {
+    var avail = await this.hoursService.detailsAvailable();
+    if (!avail) return;
+    this.hoursService.getDevopsDetails().then(deets => {
+      deets.groups.forEach((group,i) =>{
+        this.headers.push(group.group);
+        this.labels.push(new Array());
+        group.tags.forEach(tag => {
         this.labels[i].push(tag.tag);
       });
-    })
+      });
+    });
   }
+
+  getFormDetails(): DevopsHoursGroupList{
+    var deets = new DevopsHoursGroupList();
+    this.headers.forEach((header,index) =>{
+      deets.groups.push(new DevopsHoursGroup(header, this.labels[index]));
+    });
+    return deets;
+  }
+
+  save(){
+    if (this.allBlank()) return;
+    this.hoursService.save(this.getFormDetails());
+  }
+
+  allBlank(): boolean {
+    return this.headers.length < 1 || this.labels.length < 1;
+  }
+
+ 
 
   displayDetails() {
     this.showDetails = this.showDetails == 0 ? 4 : 0;

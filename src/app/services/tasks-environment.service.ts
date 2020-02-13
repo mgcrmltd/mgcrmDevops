@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DevopsTaskList, DevopsTask } from '../generate-tasks/tasks';
-import { IDevopsDetailsService } from '../details/details';
 import { environment } from '../../environments/environment'
+import { IDevopsDetailsService } from './devopsdetails';
+import { EnvironmentbaseService } from './storagebase.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TasksEnvironmentService  implements IDevopsDetailsService<DevopsTaskList>  {
+export class TasksEnvironmentService extends EnvironmentbaseService implements IDevopsDetailsService<DevopsTaskList>  {
   
   async getDevopsDetails(): Promise<DevopsTaskList> {
     let taskList = new DevopsTaskList();
@@ -28,15 +29,8 @@ export class TasksEnvironmentService  implements IDevopsDetailsService<DevopsTas
     if (this.isNullOrUndefined(env.tasks)) return false;
     return true;
   }
-  save(details: DevopsTaskList) {
-    throw new Error("Cannot save to environment.");
+  
+  constructor() {
+    super();
   }
-
-  //Now have duplicate code. Create base class for environment services
-  isNullOrUndefined(obj: any): boolean {
-    if (obj == null || typeof obj === 'undefined') return true;
-    return false;
-  }
-
-  constructor() { }
 }

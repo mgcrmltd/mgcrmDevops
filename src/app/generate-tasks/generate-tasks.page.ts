@@ -40,7 +40,6 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
       ),
     });
     
-    this.populateDetails();
   }
 
   async populateDetails() {
@@ -62,6 +61,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.loginForm.controls.complexTitle.setValue(true);
     this.toggleChange();
     this.loginForm.markAllAsTouched();
+    this.populateDetails();
   }
 
   getFailureColour() {

@@ -1,19 +1,17 @@
-import { Injectable, OnInit } from '@angular/core';
-import { IDevopsDetailsService, DevopsDetails } from '../details/details';
+import { Injectable } from '@angular/core';
+import { DevopsDetails } from '../details/details';
 import { environment } from '../../environments/environment'
+import { IDevopsDetailsService } from './devopsdetails';
+import { EnvironmentbaseService } from './storagebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DetailsEnvironmentService implements OnInit, IDevopsDetailsService<DevopsDetails> {
-  save(details:DevopsDetails) {
-    throw new Error("Cannot save to environment");
+export class DetailsEnvironmentService extends EnvironmentbaseService implements IDevopsDetailsService<DevopsDetails> {
+ 
+  constructor(){
+    super();
   }
-  ngOnInit(): void {
-    
-  }
-
-  constructor(){}
 
   async detailsAvailable(): Promise<boolean> {
     var env = environment;
@@ -24,11 +22,6 @@ export class DetailsEnvironmentService implements OnInit, IDevopsDetailsService<
       && this.isNullOrUndefined(env.teamName)
     ) return false;
     return true;
-  }
-
-  isNullOrUndefined(obj: any): boolean {
-    if (obj == null || typeof obj === 'undefined') return true;
-    return false;
   }
 
   async getDevopsDetails(): Promise<DevopsDetails> {
