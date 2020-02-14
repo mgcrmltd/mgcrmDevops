@@ -14,7 +14,7 @@ import { DevopsTaskList, DevopsTask } from './tasks';
   styleUrls: ['./generate-tasks.page.scss'],
 })
 export class GenerateTasksPage implements OnInit, AfterViewInit {
- 
+
   @ViewChild('slides', { static: false }) slides: IonSlides;
   @ViewChild('appDetails', { static: false }) details: DetailsComponent;
   public loginForm: FormGroup;
@@ -27,7 +27,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
 
   taskTitles: string[] = [];
 
-  constructor(private devopService: DevopsService, 
+  constructor(private devopService: DevopsService,
     private devopsFactory: DevopsFactoryService,
     private taskService: TasksService) {
     this.loginForm = new FormGroup({
@@ -39,7 +39,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
         ''
       ),
     });
-    
+
   }
 
   async populateDetails() {
@@ -48,7 +48,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.taskService.getDevopsDetails().then(deets => {
       this.loginForm.controls.complexTitle.setValue(deets.complex);
       deets.taskTitles.forEach(
-        x =>{
+        x => {
           this.taskTitles.push(x.name);
         }
       );
@@ -69,7 +69,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   toggleChange() {
@@ -89,38 +89,38 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
       this.details.getDevopsUrl(),
       this.details.getProjectName(),
       this.details.getidsAsArray()).then(
-        workItems => {
-          workItems.value.forEach(
-            workItem => {
-              let taskBodies = this.devopsFactory.getTaskBodies(workItem, this.taskTitles, this.loginForm.controls.complexTitle.value);
-              taskBodies.forEach(tb => {
-                this.devopService.createTaskInDevops(this.details.getPersonalToken(), this.details.getDevopsUrl(), this.details.getProjectName(), tb).then(
-                  res => {
-                    this.createdTaskCount += 1;
-                    this.appendOutputText("Created: " + tb[0].value);
-                    setTimeout(() => {
-                      this.devopService.createLinkInDevops(this.details.getPersonalToken(), this.details.getDevopsUrl(), this.details.getProjectName(), workItem.id, res.id).then(
-                        resLink => {
-                          this.createdLinkCount += 1;
-                          this.appendOutputText(`Linked ${res.id} to ${workItem.id}`);
-                        },
-                        error => {
-                          this.failedTaskCount += 1;
-                          this.appendOutputText(`Failed to link ${res.id} to ${workItem.id}`);
-                          console.log(error);
-                        }
-                      )
-                    }, 3000); //Got frequent linking errors without this
-                  },
-                  error => {
-                    this.failedTaskCount += 1;
-                    this.appendOutputText("Failed: " + tb[0].value);
-                    console.log(error);
-                  }
-                )
-              })
+        async workItems => {
+          for (const workItem of workItems.value) {
+            await new Promise( resolve => setTimeout( resolve, 200 ) );
+            let taskBodies = this.devopsFactory.getTaskBodies(workItem, this.taskTitles, this.loginForm.controls.complexTitle.value);
+            for (const tb of taskBodies) {
+              await new Promise( resolve => setTimeout( resolve, 200 ) );
+              this.devopService.createTaskInDevops(this.details.getPersonalToken(), this.details.getDevopsUrl(), this.details.getProjectName(), tb).then(
+                async res => {
+                  await new Promise( resolve => setTimeout( resolve, 200 ) );
+                  this.createdTaskCount += 1;
+                  this.appendOutputText("Created: " + tb[0].value);
+                  this.devopService.createLinkInDevops(this.details.getPersonalToken(), this.details.getDevopsUrl(), this.details.getProjectName(), workItem.id, res.id).then(
+                    resLink => {
+                      this.createdLinkCount += 1;
+                      this.appendOutputText(`Linked ${res.id} to ${workItem.id}`);
+                    },
+                    error => {
+                      this.failedTaskCount += 1;
+                      this.appendOutputText(`Failed to link ${res.id} to ${workItem.id}`);
+                      console.log(error);
+                    }
+                  ) //Got frequent linking errors without this
+                },
+                error => {
+                  this.failedTaskCount += 1;
+                  this.appendOutputText("Failed: " + tb[0].value);
+                  console.log(error);
+                }
+              )
+
             }
-          );
+          }
         },
         error => {
           console.log(error);
@@ -137,7 +137,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.details.showSprintName = false;
     this.outputText = "";
     this.details.sprintName = "";
-    
+
   }
 
   appendOutputText(textToAdd: string) {
@@ -166,7 +166,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     this.slides.slideTo(1);
   }
 
-  getFormDetails(): DevopsTaskList{
+  getFormDetails(): DevopsTaskList {
     var deets = new DevopsTaskList();
     deets.taskTitles = new Array();
     deets.complex = this.loginForm.controls.complexTitle.value;
@@ -178,7 +178,7 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
     return deets;
   }
 
-  save(){
+  save() {
     if (this.allBlank()) return;
     this.taskService.save(this.getFormDetails());
   }
@@ -188,8 +188,8 @@ export class GenerateTasksPage implements OnInit, AfterViewInit {
   }
   addTask() {
     var t = this.loginForm.controls.taskTitleToAdd.value;
-    if (t === null || typeof t === undefined || t==="") return;
-    if(this.taskTitles.includes(t)) return;
+    if (t === null || typeof t === undefined || t === "") return;
+    if (this.taskTitles.includes(t)) return;
     this.taskTitles.push(t);
     this.loginForm.controls.taskTitleToAdd.setValue("");
     this.slides.slideTo(0);
