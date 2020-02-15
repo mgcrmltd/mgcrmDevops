@@ -39,16 +39,19 @@
                    </ion-row>
 
                  </ion-col>
-                 <ion-fab vertical="top" horizontal="end">
-                  <ion-fab-button size="small" (click)="save()">
-                    <ion-icon name="save"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
-                 <ion-fab vertical="center" horizontal="end">
-                  <ion-fab-button (click)="displayAddGroup()" size="small">
-                    <ion-icon name="add"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
+                 <div style="position: fixed; right: 1px; height: 80%;">
+                  <ion-fab vertical="top" horizontal="end">
+                    <ion-fab-button size="small" (click)="save()">
+                      <ion-icon name="save"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab>
+                   <ion-fab vertical="center" horizontal="end">
+                    <ion-fab-button (click)="displayAddGroup()" size="small">
+                      <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab>
+                 </div>
+
              </ion-col>
      <ion-fab vertical="bottom" horizontal="end">
       <ion-fab-button (click)="displayDetails()" size="small">
