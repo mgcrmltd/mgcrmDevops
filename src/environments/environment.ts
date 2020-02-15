@@ -8,11 +8,12 @@ export const environment = {
   projectName: "",
   teamName: "",
   personalToken: "",
-  taskTitles : [
-    
-  ]
+  tasks: {
+    complex: true,
+    taskTitles : []
+  }, 
+  hoursCalc: []
 };
-
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
